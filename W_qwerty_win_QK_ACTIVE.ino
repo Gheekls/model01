@@ -75,9 +75,9 @@
 // Support for USB quirks, like changing the key state report protocol
 #include "Kaleidoscope-USB-Quirks.h"
 
+
 // Support for produce one keycode (i.e. symbol) when tapped, and a different keycode when held.
 #include "Kaleidoscope-Qukeys.h"
-
 
 
 /** This 'enum' is a list of all the macros used by the Model 01's firmware
@@ -147,12 +147,26 @@ enum { MACRO_VERSION_INFO,
   *
   */
 
-enum { PRIMARY, NUMPAD, FUNCTION, GUIKL1, GUIKL2, GUIKL3, GUIKL4, GUIKL5, GUIKL6 }; // layers
+enum { PRIMARY, NUMPAD, FUNCTION, L1, L2, L3, L4, L5, L6, L7, L8 }; // layers
 
 
-
+/**
+  * To change your keyboard's layout from QWERTY to DVORAK or COLEMAK, comment out the line
+  *
+  * #define PRIMARY_KEYMAP_QWERTY
+  *
+  * by changing it to
+  *
+  * // #define PRIMARY_KEYMAP_QWERTY
+  *
+  * Then uncomment the line corresponding to the layout you want to use.
+  *
+  */
 
 #define PRIMARY_KEYMAP_QWERTY
+// #define PRIMARY_KEYMAP_DVORAK
+// #define PRIMARY_KEYMAP_COLEMAK
+// #define PRIMARY_KEYMAP_CUSTOM
 
 
 
@@ -165,33 +179,12 @@ KEYMAPS(
 
 #if defined (PRIMARY_KEYMAP_QWERTY)
   [PRIMARY] = KEYMAP_STACKED
-  (LT(GUIKL5,Spacebar),        Key_1,         Key_2,         Key_3,         Key_4,          Key_5,                Key_Backtick,
-   LT(GUIKL2,Home),            Key_Q,         Key_W,         Key_E,         Key_R,          Key_T,                Key_Tab,
-   LT(GUIKL1,End),             Key_A,         Key_S,         Key_D,         Key_F,          Key_G,
-   LT(GUIKL3,Escape),          Key_Z,         Key_X,         Key_C,         Key_V,          LT(GUIKL6,B),         LT(NUMPAD,Enter),
+  (LT(L5,Spacebar),        Key_1,         Key_2,                Key_3,                Key_4,                 Key_5,                Key_Backtick,
+   LT(L2,Home),            Key_Q,         Key_W,                Key_E,                Key_R,                 Key_T,                Key_Tab,
+   LT(L1,End),             Key_A,         Key_S,                Key_D,                Key_F,                 Key_G,
+   LT(L3,Escape),          Key_Z,         LT(L8,X),         LT(L7,C),         LT(L6,V),          LT(L4,B),         LT(NUMPAD,Enter),
    
    Key_Backspace,          Key_LeftShift,    Key_LeftControl,    Key_LeftAlt,
-   ShiftToLayer(FUNCTION),
-
-   LockLayer(NUMPAD),          Key_6,            Key_7,         Key_8,         Key_9,          Key_0,                  Key_Minus,
-   Key_Backtick,               Key_Y,            Key_U,         Key_I,         Key_O,          Key_P,                  LT(GUIKL2,Equals),
-                               Key_H,            Key_J,         Key_K,         Key_L,          LT(GUIKL4,Semicolon),   LT(GUIKL1,Quote),
-   LT(GUIKL4,Escape),          LT(GUIKL4,N),     Key_M,         Key_Comma,     Key_Period,     LT(NUMPAD,Slash),       LT(GUIKL3,Enter),
-   
-   GUI_T(Escape),          Key_LeftAlt,      Key_RightShift,     LT(GUIKL5,Spacebar),
-   ShiftToLayer(FUNCTION)),
-
-
-
-
-#elif defined (PRIMARY_KEYMAP_CUSTOM)
-  // Edit this keymap to make a custom layout
-  [PRIMARY] = KEYMAP_STACKED
-  (___,          Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDEffectNext,
-   Key_Backtick, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
-   Key_PageUp,   Key_A, Key_S, Key_D, Key_F, Key_G,
-   Key_PageDown, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
-   Key_LeftControl, Key_Backspace, Key_LeftGui, Key_LeftShift,
    ShiftToLayer(FUNCTION),
 
    M(MACRO_ANY),  Key_6, Key_7, Key_8,     Key_9,         Key_0,         LockLayer(NUMPAD),
@@ -201,6 +194,7 @@ KEYMAPS(
    Key_RightShift, Key_LeftAlt, Key_Spacebar, Key_RightControl,
    ShiftToLayer(FUNCTION)),
 
+
 #else
 
 #error "No default keymap defined. You should make sure that you have a line like '#define PRIMARY_KEYMAP_QWERTY' in your sketch"
@@ -209,155 +203,164 @@ KEYMAPS(
 
 
 
-  [NUMPAD] =  KEYMAP_STACKED     //------------------------------------------------------------------------------------------------------------------------------------------------------
-  (Key_Spacebar,                  Key_Comma,            Key_Period,         Key_UpArrow,      Key_Minus,          Key_Equals,       Key_Delete,
-   Key_LeftControl,               Key_Slash,            Key_LeftArrow,      Key_DownArrow,    Key_RightArrow,     Key_Semicolon,    Key_Backspace,
-   Key_LeftAlt,                   Key_1,                Key_2,              Key_3,            Key_4,              Key_5,       
-   ___,                           Key_6,                Key_7,              Key_8,            Key_9,              Key_0,            ___,
-   
-   ___,    ___,   ___,   ___,
-   LALT(LCTRL(Key_LeftShift)),
-
-
-   LockLayer(NUMPAD),      ___,             ___,       ___,        ___,         Key_KeypadSubtract,   Key_KeypadMultiply,  
-   ___,                    ___,             Key_7,     Key_8,      Key_9,       Key_KeypadAdd,        Key_Equals,
-                           ___,             Key_4,     Key_5,      Key_6,       Key_Semicolon,        ___,
-   Key_LeftControl,        Key_Period,      Key_1,     Key_2,      Key_3,       Key_KeypadDivide,     Key_Enter,
-   
-   ___,    ___,   Key_LeftShift,  Key_0,
-   ___),
-   
-
-  [FUNCTION] =  KEYMAP_STACKED   //------------------------------------------------------------------------------------------------------------------------------------------------------
-  (Key_LEDEffectNext,       ___,            ___,               Key_UpArrow,        Key_Backslash,      ___,             Key_Delete,
-   LALT(LCTRL(Key_Home)),   ___,            Key_LeftArrow,     Key_DownArrow,      Key_RightArrow,     Key_PageUp,      Key_Backspace,
-   ___,                     Key_LeftGui,    ___,               ___,                ___,                Key_PageDown,
-   Key_LeftShift,           Key_Comma,      Key_Period,        ___,                Key_Spacebar,       Key_Spacebar,    LALT(LCTRL(Key_LeftShift)),                    
-   
-   ___,    Key_LeftShift,    Key_LeftControl, Key_LeftAlt,
+  [NUMPAD] =  KEYMAP_STACKED
+  (___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
    ___,
 
-
-   Consumer_ScanPreviousTrack, Key_PrintScreen,        Key_Insert,             ___,                       ___,                       ___,                ___,
-   Consumer_PlaySlashPause,    Key_PcApplication,      Key_LeftCurlyBracket,   Key_RightCurlyBracket,     Key_LeftBracket,           Key_RightBracket,   ___,
-                               Key_LeftArrow,          Key_DownArrow,          Key_UpArrow,               Key_RightArrow,            ___,                ___,
-   Consumer_ScanNextTrack,     ___,                    Consumer_Mute,          Consumer_VolumeDecrement,  Consumer_VolumeIncrement,  Key_Backslash,      Key_Pipe,
-   
-   ___, ___, ___, Key_Spacebar,
+   M(MACRO_VERSION_INFO),  ___, Key_7, Key_8,      Key_9,              Key_KeypadSubtract, ___,
+   ___,                    ___, Key_4, Key_5,      Key_6,              Key_KeypadAdd,      ___,
+                           ___, Key_1, Key_2,      Key_3,              Key_Equals,         ___,
+   ___,                    ___, Key_0, Key_Period, Key_KeypadMultiply, Key_KeypadDivide,   Key_Enter,
+   ___, ___, ___, ___,
    ___),
-   
 
-  [GUIKL1] = KEYMAP_STACKED     //------------------------------------------------------------------------------------------------------------------------------------------------------
-  (LALT(LCTRL(Key_Home)),   ___,                ___,               ___,               ___,                ___,                LockLayer(NUMPAD),
-   ___,                     Key_P,              Key_O,             Key_I,             Key_U,              Key_Y,              ___,
-   ___,                     LGUI(Key_R),        Key_L,             Key_K,             Key_J,              Key_H,
-   LGUI(Key_S),             ___,                ___,               ___,               Key_M,              Key_N,              LALT(LCTRL(Key_LeftShift)),
-   
-   Key_LeftGui,  Key_LeftShift,   Key_LeftControl, Key_LeftAlt,
-   Key_LeftShift,
+  [FUNCTION] =  KEYMAP_STACKED
+  (___,      Key_F1,           Key_F2,      Key_F3,     Key_F4,        Key_F5,           Key_CapsLock,
+   Key_Tab,  ___,              Key_mouseUp, ___,        Key_mouseBtnR, Key_mouseWarpEnd, Key_mouseWarpNE,
+   Key_Home, Key_mouseL,       Key_mouseDn, Key_mouseR, Key_mouseBtnL, Key_mouseWarpNW,
+   Key_End,  Key_PrintScreen,  Key_Insert,  ___,        Key_mouseBtnM, Key_mouseWarpSW,  Key_mouseWarpSE,
+   ___, Key_Delete, ___, ___,
+   ___,
 
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-                           ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-        
-  ___,    ___,    ___,    ___,
-   
+   Consumer_ScanPreviousTrack, Key_F6,                 Key_F7,                   Key_F8,                   Key_F9,          Key_F10,          Key_F11,
+   Consumer_PlaySlashPause,    Consumer_ScanNextTrack, Key_LeftCurlyBracket,     Key_RightCurlyBracket,    Key_LeftBracket, Key_RightBracket, Key_F12,
+                               Key_LeftArrow,          Key_DownArrow,            Key_UpArrow,              Key_RightArrow,  ___,              ___,
+   Key_PcApplication,          Consumer_Mute,          Consumer_VolumeDecrement, Consumer_VolumeIncrement, ___,             Key_Backslash,    Key_Pipe,
+   ___, ___, Key_Enter, ___,
    ___),
-      
 
-  [GUIKL2] = KEYMAP_STACKED    //------------------------------------------------------------------------------------------------------------------------------------------------------
-  (___,                  Key_F1,                Key_F2,               Key_F3,              Key_F4,              Key_F5,                 LALT(LCTRL(Key_Delete)),
-   ___,                  Key_F6,                Key_F7,               Key_F8,              Key_F9,              Key_F10,                Key_CapsLock,
-   ___,                  ___,                   ___,                  ___,                 Key_F11,             Key_F12,
-   ___,                  ___,                   ___,                  ___,                 ___,                 ___,                    LALT(LCTRL(Key_LeftShift)),
-  
-   ___,      ___,     ___,    ___,
-   Key_LeftShift,
 
-  ___,                   ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-  ___,                   ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-                         ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-  ___,                   ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-        
-  ___,        ___,        ___,        ___,
+   [L1] =  KEYMAP_STACKED
+  (___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, Key_1, Key_2, Key_3, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,  
+   ___, ___, ___, ___,
+   ___,
+
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___),
+
+
+
+   [L2] =  KEYMAP_STACKED
+  (___, ___, ___, ___, ___, ___, ___,
+   ___, Key_1, Key_2, Key_3, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___,
+
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___),
+
+   [L3] =  KEYMAP_STACKED
+  (___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___,
+   ___, Key_1, Key_2, Key_3, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___,
+
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___),
+
+
+   [L4] =  KEYMAP_STACKED
+  (___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, Key_1, Key_2, Key_3, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___,
+
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___),
+
+
+
+ [L5] =  KEYMAP_STACKED
+  (___, Key_1, Key_2, Key_3, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___,
+
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___),
+
+
+ [L6] =  KEYMAP_STACKED
+  (___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, Key_1, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___,
+
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___),
+
+
+  [L7] =  KEYMAP_STACKED
+  (___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, Key_1, Key_2, Key_3,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___,
+
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___),
+
+   [L8] =  KEYMAP_STACKED
+  (___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, Key_1, Key_2, Key_3, ___,
+   ___, ___, ___, ___,
+   ___,
+
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___)
    
-  ___),
-
-
-  [GUIKL3] = KEYMAP_STACKED    //------------------------------------------------------------------------------------------------------------------------------------------------------ 
-  (___,                      ___,                         ___,                            ___,                         ___,                  ___,                 ___,
-   LGUI(Key_Tab),            LGUI(LCTRL(Key_LeftArrow)),  LGUI(LCTRL(Key_RightArrow)),    LGUI(Key_D),                 ___,                  ___,                 ___,
-   LCTRL(LGUI(Key_D)),       ___,                         Key_UpArrow,                    Key_Backslash,               Key_PageUp,           ___,  
-   ___,                      Key_LeftArrow,               Key_DownArrow,                  Key_RightArrow,              Key_PageDown,         ___,                 Key_LeftGui,
-   
-   Key_Spacebar,   Key_LeftShift,    Key_LeftControl, Key_LeftAlt,
-   LALT(LCTRL(Key_LeftShift)),
-
-   ___,                    ___,             ___,       ___,        ___,                Key_KeypadSubtract,         Key_KeypadMultiply,  
-   ___,                    ___,             Key_7,     Key_8,      Key_9,              Key_KeypadAdd,              Key_Equals,
-                           ___,             Key_4,     Key_5,      Key_6,              Key_Semicolon,              ___,
-   ___,                    Key_Period,      Key_1,     Key_2,      Key_3,              Key_KeypadDivide,           Key_Enter,
-   
-   ___,    ___,   Key_LeftShift,  Key_0,
-   
-   ShiftToLayer(FUNCTION)),
-
- [GUIKL4] = KEYMAP_STACKED    //------------------------------------------------------------------------------------------------------------------------------------------------------
- (___,                     ___,                   ___,                 Key_UpArrow,         ___,                  ___,                   ___,
-  ___,                     ___,                   Key_LeftArrow,       Key_DownArrow,       Key_RightArrow,       ___,                   ___,
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                    
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,    
-             
-  ___,     ___,      ___,      ___,               
-  ___,
-
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-                           ___,                   ___,                 Key_Minus,           Key_Equals,           ___,                   ___,
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-        
-  ___,      ___,      ___,      ___,
-   
-  ShiftToLayer(FUNCTION)),
-   
-[GUIKL5] = KEYMAP_STACKED     //------------------------------------------------------------------------------------------------------------------------------------------------------
- (___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                    
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,    
-             
-  ___,     ___,      ___,      ___,
-  ___,
-
-  ___,              ___,                 ___,                    ___,                       ___,                 ___,                  ___,
-  ___,              ___,                 Key_LeftCurlyBracket,   Key_RightCurlyBracket,     ___,                 ___,                  ___,
-                    Key_LeftArrow,       Key_DownArrow,          Key_UpArrow,               Key_RightArrow,      ___,                  ___,
-  ___,              ___,                 ___,                    ___,                       Key_PageUp,          Key_PageDown,         ___,
-   
-  Key_LeftGui,    ___,    ___,    ___,
-   
-  ShiftToLayer(FUNCTION)),
-
-  [GUIKL6] = KEYMAP_STACKED     //------------------------------------------------------------------------------------------------------------------------------------------------------
- (___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,
-  ___,                     ___,                   ___,                 Key_Tab,                 ___,                  ___,                    
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                   ___,    
-             
-  ___,     ___,      ___,      ___,
-  ___,
-
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                  ___,
-  ___,                     ___,                   ___,                 ___,                 ___,                  ___,                  ___,
-                           ___,                   ___,                 ___,                 ___,                  ___,                  ___,
-  ___,                     ___,                   ___,                 ___,                 Key_PageUp,           Key_PageDown,         ___,
-   
-  Key_LeftGui,    ___,    ___,    ___,
-   
-  ShiftToLayer(FUNCTION))
-  
-
 ) // KEYMAPS(
 
 /* Re-enable astyle's indent enforcement */
@@ -603,32 +606,25 @@ KALEIDOSCOPE_INIT_PLUGINS(
   // nevertheless. Such as toggling the key report protocol between Boot (used
   // by BIOSes) and Report (NKRO).
   USBQuirks
-);            
+);
 
 /** The 'setup' function is one of the two standard Arduino sketch functions.
  * It's called when your keyboard first powers up. This is where you set up
  * Kaleidoscope and any plugins.
  */
 void setup() {
-
-   // Qukeys setup
+  // Qukeys setup
   QUKEYS(
-    kaleidoscope::plugin::Qukey(0, KeyAddr(0, 0), ShiftToLayer(GUIKL5)),        // Spacebar/GUIKL5
-    kaleidoscope::plugin::Qukey(0, KeyAddr(1, 0), ShiftToLayer(GUIKL5)),        // Home/GUIKL2
-    kaleidoscope::plugin::Qukey(0, KeyAddr(2, 0), ShiftToLayer(GUIKL3)),        // End/GUIKL1
-    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 0), ShiftToLayer(GUIKL3)),        // Escape/GUIKL3
-    kaleidoscope::plugin::Qukey(0, KeyAddr(2, 6), ShiftToLayer(NUMPAD)),        // Enter/NUMPAD
-    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 5), ShiftToLayer(GUIKL6)),        // B/GUIKL6
-    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 10), ShiftToLayer(GUIKL4)),       // N/GUIKL4
-    kaleidoscope::plugin::Qukey(0, KeyAddr(1, 15), ShiftToLayer(GUIKL2)),       // Equals/GUIKL2
-    kaleidoscope::plugin::Qukey(0, KeyAddr(2, 15), ShiftToLayer(GUIKL1)),       // Quote/GUIKL1
-    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 15), ShiftToLayer(GUIKL3)),       // Enter/GUIKL3
-    kaleidoscope::plugin::Qukey(0, KeyAddr(2, 14), ShiftToLayer(GUIKL4)),       // Semicolon/GUIKL
-    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 14), ShiftToLayer(GUIKL4)),       // Slash/NUMPAD
-    kaleidoscope::plugin::Qukey(0, KeyAddr(2, 9), ShiftToLayer(NUMPAD)),        // Escape/GUIKL4
-    kaleidoscope::plugin::Qukey(0, KeyAddr(0, 8), ShiftToLayer(GUIKL5)),        // Spacebar/GUIKL5
-    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 8), Key_LeftGui),                 // Escape/LGUI
-    
+    kaleidoscope::plugin::Qukey(0, KeyAddr(0, 0), ShiftToLayer(L5)),       // Spacebar/L5
+    kaleidoscope::plugin::Qukey(0, KeyAddr(1, 0), ShiftToLayer(L2)),       // Home/L2
+    kaleidoscope::plugin::Qukey(0, KeyAddr(2, 0), ShiftToLayer(L1)),       // End/L1
+    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 0), ShiftToLayer(L3)),       // Escape/L3
+    kaleidoscope::plugin::Qukey(0, KeyAddr(2, 6), ShiftToLayer(NUMPAD)),   // Enter/NUMPAD
+    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 5), ShiftToLayer(L4)),       // B/L4
+    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 4), ShiftToLayer(L6)),       // V/L6
+    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 3), ShiftToLayer(L7)),       // C/L7
+    kaleidoscope::plugin::Qukey(0, KeyAddr(3, 2), ShiftToLayer(L8)),       // X/L8
+   
   )
   
   // First, call Kaleidoscope's internal setup function
